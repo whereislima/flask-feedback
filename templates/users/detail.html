@@ -1,0 +1,27 @@
+{% extends 'base.html'  %}
+
+{% block title %} {% endblock %}
+
+
+{% block content %}
+About user
+<ul>
+<li>{{ user.username }}</li>
+<li>{{ user.email }}</li>
+<li>{{ user.first_name }}</li>
+<li>{{ user.last_name }}</li>
+</ul>
+
+Feedback
+<ul>
+  {% for feedback in all_feedback %}
+  <li>
+    <p> {{ feedback.title }} </p> 
+    <p> {{ feebback.content }}</p>
+    <a href="">Edit</a>
+    <a href="">Delete</a>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
