@@ -17,9 +17,9 @@ Feedback
   {% for feedback in all_feedback %}
   <li>
     <p> {{ feedback.title }} </p> 
-    <p> {{ feebback.content }}</p>
-    <a href="">Edit</a>
-    <a href="">Delete</a>
+    <p> {{ feedback.content }}</p>
+    <a href="/feedback/{{ feedback.id }}/update">Edit</a>
+    <a href="/feedback/{{ feedback.id }}/delete">Delete</a>
   </li>
   {% endfor %}
 </ul>

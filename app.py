@@ -35,18 +35,12 @@ def register_user():
         
         db.session.add(user)
         db.session.commit()
-        # not registering new users with or without below
-        # try:
-        #     db.session.commit()
-        # except IntegrityError:
-            
-        #     form.username.errors.append('username already taken.')
-        #     return render_template('register.html', form=form)
 
         session['username'] = user.username
         flash('Successfully created your account')
         return redirect(f"/users/{user.username}")
     else:
+        flash("failed")
         return render_template("register.html", form=form)
 
 @app.route("/login", methods=["GET", "POST"])
@@ -56,14 +50,14 @@ def login_user():
     if form.validate_on_submit():
         username=form.username.data
         password=form.password.data
-
         user = User.authenticate(username, password)
+
         if user:
             session['username'] = user.username
             return redirect(f"/users/{user.username}")
         else:
             form.username.errors = ['Invalid username/password']
-    else:
+
         return render_template("login.html", form=form)
 
 @app.route("/users/<username>")
@@ -100,5 +94,26 @@ def delete_user(username):
 @app.route("/users/<username>/feedback/add", methods=["GET", "POST"])
 def add_feedback(username):
 
+    if "username" not in session or username != session['username']:
+        raise Unauthorized()
+
     form = FeedbackForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        content = form.content.data
+        feedback = Feedback(title=title, content=content, username=username)
+        db.session.add(feedback)
+        db.session.commit()
+        return redirect(f"/users/{feedback.username}")
+
     return render_template("users/add_feedback.html", form=form)
+
+@app.route("/feedback/<int:feedback_id>/update", methods=["GET", "POST"])
+def update_feedback(feedback_id):
+    
+    return ("update")
+
+@app.route("/feedback/<int:feedback_id>/delete", methods=["GET", "POST"])
+def delete_feedback(feedback_id):
+
+    return ("delete")
